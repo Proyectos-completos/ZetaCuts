@@ -121,6 +121,35 @@ php artisan cache:clear || echo "ADVERTENCIA: No se pudo limpiar cache (tabla pu
 php artisan route:clear || echo "ADVERTENCIA: No se pudo limpiar route cache"
 php artisan view:clear || echo "ADVERTENCIA: No se pudo limpiar view cache"
 
+# Construir el frontend si no existe y está disponible el código fuente
+if [ ! -d "public/frontend" ] || [ -z "$(ls -A public/frontend 2>/dev/null)" ]; then
+  echo "Frontend no encontrado, intentando construir..."
+  
+  # Intentar desde diferentes ubicaciones posibles
+  FRONTEND_DIR=""
+  if [ -d "../frontend" ]; then
+    FRONTEND_DIR="../frontend"
+  elif [ -d "../../frontend" ]; then
+    FRONTEND_DIR="../../frontend"
+  elif [ -d "/tmp/frontend" ]; then
+    FRONTEND_DIR="/tmp/frontend"
+  fi
+  
+  if [ ! -z "$FRONTEND_DIR" ] && [ -f "$FRONTEND_DIR/package.json" ]; then
+    echo "Construyendo frontend desde $FRONTEND_DIR..."
+    cd "$FRONTEND_DIR"
+    npm install --legacy-peer-deps || npm install
+    npm run build
+    mkdir -p /var/www/html/public/frontend
+    cp -r build/* /var/www/html/public/frontend/
+    cd /var/www/html
+    echo "Frontend construido exitosamente"
+  else
+    echo "ADVERTENCIA: No se pudo encontrar el código fuente del frontend"
+    echo "Por favor, cambia el Root Directory en Render a vacío (raíz del repo)"
+  fi
+fi
+
 # Ejecutar seeders (opcional, solo si es necesario)
 # echo "Ejecutando seeders..."
 # php artisan db:seed --force || echo "ADVERTENCIA: Error al ejecutar seeders"

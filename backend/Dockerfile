@@ -23,7 +23,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Copiar script de entrada ANTES de establecer WORKDIR
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY backend/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh && \
     sed -i 's/\r$//' /usr/local/bin/docker-entrypoint.sh && \
     ls -la /usr/local/bin/docker-entrypoint.sh
@@ -31,23 +31,28 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh && \
 # Establecer directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiar archivos de composer
-COPY composer.json composer.lock ./
+# Copiar archivos de composer del backend
+COPY backend/composer.json backend/composer.lock ./
 
 # Instalar dependencias de PHP
 RUN composer install --no-scripts --no-autoloader
 
 # Copiar el resto de los archivos del backend
-COPY . .
+COPY backend/ .
 
-# Construir el frontend y copiarlo al directorio public
-# Nota: Render ejecuta el build desde el root del repo, así que frontend/ está disponible
-WORKDIR /tmp/frontend
-COPY frontend/package.json frontend/package-lock.json* ./
-RUN npm install --legacy-peer-deps || npm install
-COPY frontend/ ./
-RUN npm run build
-RUN mkdir -p /var/www/html/public/frontend && cp -r build/* /var/www/html/public/frontend/
+# Construir el frontend si está disponible (desde la raíz del repo)
+WORKDIR /tmp
+RUN if [ -d "frontend" ] && [ -f "frontend/package.json" ]; then \
+        echo "Construyendo frontend desde el contexto de build..."; \
+        cd frontend && \
+        npm install --legacy-peer-deps || npm install && \
+        npm run build && \
+        mkdir -p /var/www/html/public/frontend && \
+        cp -r build/* /var/www/html/public/frontend/ && \
+        echo "Frontend construido exitosamente"; \
+    else \
+        echo "Frontend no encontrado en el contexto de build, se construirá en tiempo de ejecución"; \
+    fi
 WORKDIR /var/www/html
 
 # Crear directorios necesarios y configurar permisos antes de composer
