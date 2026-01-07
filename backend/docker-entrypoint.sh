@@ -55,15 +55,16 @@ if [ -z "$APP_KEY" ] || grep -q "APP_KEY=$" .env; then
   php artisan key:generate --force || echo "ADVERTENCIA: No se pudo generar APP_KEY"
 fi
 
-# Limpiar caché
-php artisan config:clear
-php artisan cache:clear
-php artisan route:clear
-php artisan view:clear
-
-# Ejecutar migraciones
+# Ejecutar migraciones PRIMERO (antes de limpiar caché)
 echo "Ejecutando migraciones..."
 php artisan migrate --force || echo "ADVERTENCIA: Error al ejecutar migraciones"
+
+# Limpiar caché DESPUÉS de las migraciones (con manejo de errores)
+echo "Limpiando caché..."
+php artisan config:clear || echo "ADVERTENCIA: No se pudo limpiar config cache"
+php artisan cache:clear || echo "ADVERTENCIA: No se pudo limpiar cache (tabla puede no existir aún)"
+php artisan route:clear || echo "ADVERTENCIA: No se pudo limpiar route cache"
+php artisan view:clear || echo "ADVERTENCIA: No se pudo limpiar view cache"
 
 # Ejecutar seeders (opcional, solo si es necesario)
 # echo "Ejecutando seeders..."
