@@ -123,36 +123,30 @@ php artisan view:clear || echo "ADVERTENCIA: No se pudo limpiar view cache"
 
 # Construir el frontend si no existe
 if [ ! -d "public/frontend" ] || [ -z "$(ls -A public/frontend 2>/dev/null)" ]; then
-  echo "Frontend no encontrado, descargando y construyendo desde el repositorio..."
+  echo "Frontend no encontrado, construyendo desde el repositorio..."
   
-  # Obtener la URL del repositorio desde las variables de entorno de Render o Git
-  REPO_URL="${RENDER_GIT_REPO_URL:-}"
-  if [ -z "$REPO_URL" ] && [ -d ".git" ]; then
-    REPO_URL=$(git config --get remote.origin.url 2>/dev/null || echo "")
-  fi
+  # URL del repositorio (Render lo proporciona o lo obtenemos de Git)
+  REPO_URL="https://github.com/Proyectos-completos/ZetaCuts.git"
   
-  if [ ! -z "$REPO_URL" ]; then
-    echo "Clonando repositorio para obtener el frontend..."
-    cd /tmp
-    git clone --depth 1 --single-branch --branch main "$REPO_URL" repo_temp 2>/dev/null || \
-    git clone --depth 1 "$REPO_URL" repo_temp 2>/dev/null || true
-    
-    if [ -d "repo_temp/frontend" ] && [ -f "repo_temp/frontend/package.json" ]; then
-      echo "Construyendo frontend..."
-      cd repo_temp/frontend
-      npm install --legacy-peer-deps || npm install
-      npm run build
-      mkdir -p /var/www/html/public/frontend
-      cp -r build/* /var/www/html/public/frontend/
-      cd /var/www/html
-      rm -rf /tmp/repo_temp
-      echo "Frontend construido exitosamente"
-    else
-      echo "ADVERTENCIA: No se pudo encontrar el frontend en el repositorio"
-      rm -rf /tmp/repo_temp
-    fi
+  echo "Clonando repositorio para obtener el frontend..."
+  cd /tmp
+  rm -rf repo_temp
+  git clone --depth 1 --branch main "$REPO_URL" repo_temp 2>/dev/null || \
+  git clone --depth 1 "$REPO_URL" repo_temp 2>/dev/null || true
+  
+  if [ -d "repo_temp/frontend" ] && [ -f "repo_temp/frontend/package.json" ]; then
+    echo "Construyendo frontend..."
+    cd repo_temp/frontend
+    npm install --legacy-peer-deps || npm install
+    npm run build
+    mkdir -p /var/www/html/public/frontend
+    cp -r build/* /var/www/html/public/frontend/
+    cd /var/www/html
+    rm -rf /tmp/repo_temp
+    echo "✅ Frontend construido exitosamente"
   else
-    echo "ADVERTENCIA: No se pudo obtener la URL del repositorio para construir el frontend"
+    echo "❌ ERROR: No se pudo encontrar el frontend en el repositorio"
+    rm -rf /tmp/repo_temp
   fi
 fi
 
