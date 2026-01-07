@@ -1,115 +1,58 @@
 #!/bin/sh
 set -e
 
-echo "Esperando a que MySQL esté listo..."
-# Esperar hasta que MySQL esté realmente listo para aceptar conexiones
-until nc -z mysql 3306; do
-  echo "Esperando a MySQL..."
-  sleep 2
-done
-echo "Puerto MySQL está abierto, esperando inicialización completa..."
-# Esperar un poco más para que MySQL termine de inicializar
-sleep 10
+echo "Iniciando aplicación Laravel..."
 
-# Verificar que MySQL acepta conexiones usando PHP (más confiable)
-MAX_RETRIES=30
-RETRY_COUNT=0
-DB_READY=0
-
-echo "Verificando conexión a MySQL..."
-
-while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-  # Primero verificar con root (siempre existe)
-  php -r "
-  try {
-    \$pdo = new PDO('mysql:host=mysql;port=3306', 'root', 'root123');
-    \$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    exit(0);
-  } catch (Exception \$e) {
-    exit(1);
-  }
-  " > /dev/null 2>&1
-  
-  if [ $? -eq 0 ]; then
-    # Si root funciona, verificar con el usuario de la aplicación
-    php -r "
-    try {
-      \$pdo = new PDO('mysql:host=mysql;port=3306;dbname=zetacuts', 'zetacuts', 'zetacuts123');
-      \$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      exit(0);
-    } catch (Exception \$e) {
-      exit(1);
-    }
-    " > /dev/null 2>&1
-    
-    if [ $? -eq 0 ]; then
-      echo "MySQL está listo y acepta conexiones con el usuario zetacuts!"
-      DB_READY=1
-      break
-    else
-      echo "MySQL responde pero el usuario zetacuts aún no está listo... (intento $RETRY_COUNT/$MAX_RETRIES)"
-    fi
-  else
-    echo "Esperando a que MySQL acepte conexiones... (intento $RETRY_COUNT/$MAX_RETRIES)"
-  fi
-  
-  RETRY_COUNT=$((RETRY_COUNT + 1))
-  sleep 3
-done
-
-if [ $DB_READY -eq 0 ]; then
-  echo "ADVERTENCIA: MySQL no respondió correctamente después de $MAX_RETRIES intentos."
-  echo "El servidor continuará, pero puede haber problemas de conexión a la base de datos."
-fi
-
-# Generar clave de aplicación si no existe
+# Crear archivo .env si no existe, usando variables de entorno de Render
 if [ ! -f .env ]; then
   if [ -f .env.example ]; then
     cp .env.example .env
   else
-    echo "ADVERTENCIA: No se encontró .env.example, creando .env básico..."
+    echo "Creando .env desde variables de entorno..."
     cat > .env <<EOF
 APP_NAME=ZetaCuts
-APP_ENV=local
-APP_KEY=
-APP_DEBUG=true
-APP_URL=http://localhost:8000
+APP_ENV=${APP_ENV:-production}
+APP_KEY=${APP_KEY:-}
+APP_DEBUG=${APP_DEBUG:-false}
+APP_URL=${APP_URL:-http://localhost:8000}
 
-DB_CONNECTION=mysql
-DB_HOST=mysql
-DB_PORT=3306
-DB_DATABASE=zetacuts
-DB_USERNAME=zetacuts
-DB_PASSWORD=zetacuts123
+DB_CONNECTION=${DB_CONNECTION:-pgsql}
+DB_HOST=${DB_HOST:-}
+DB_PORT=${DB_PORT:-5432}
+DB_DATABASE=${DB_DATABASE:-}
+DB_USERNAME=${DB_USERNAME:-}
+DB_PASSWORD=${DB_PASSWORD:-}
 EOF
   fi
-  php artisan key:generate
 fi
 
-# Asegurar que la configuración de DB esté correcta (usar variables de entorno si están disponibles)
+# Actualizar .env con variables de entorno si están disponibles
+if [ ! -z "$APP_KEY" ]; then
+  sed -i "s/APP_KEY=.*/APP_KEY=$APP_KEY/" .env || echo "APP_KEY=$APP_KEY" >> .env
+fi
+if [ ! -z "$DB_CONNECTION" ]; then
+  sed -i "s/DB_CONNECTION=.*/DB_CONNECTION=$DB_CONNECTION/" .env || echo "DB_CONNECTION=$DB_CONNECTION" >> .env
+fi
 if [ ! -z "$DB_HOST" ]; then
-  sed -i "s/DB_HOST=.*/DB_HOST=$DB_HOST/" .env
+  sed -i "s/DB_HOST=.*/DB_HOST=$DB_HOST/" .env || echo "DB_HOST=$DB_HOST" >> .env
+fi
+if [ ! -z "$DB_PORT" ]; then
+  sed -i "s/DB_PORT=.*/DB_PORT=$DB_PORT/" .env || echo "DB_PORT=$DB_PORT" >> .env
 fi
 if [ ! -z "$DB_DATABASE" ]; then
-  sed -i "s/DB_DATABASE=.*/DB_DATABASE=$DB_DATABASE/" .env
+  sed -i "s/DB_DATABASE=.*/DB_DATABASE=$DB_DATABASE/" .env || echo "DB_DATABASE=$DB_DATABASE" >> .env
 fi
 if [ ! -z "$DB_USERNAME" ]; then
-  sed -i "s/DB_USERNAME=.*/DB_USERNAME=$DB_USERNAME/" .env
+  sed -i "s/DB_USERNAME=.*/DB_USERNAME=$DB_USERNAME/" .env || echo "DB_USERNAME=$DB_USERNAME" >> .env
 fi
 if [ ! -z "$DB_PASSWORD" ]; then
-  sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=$DB_PASSWORD/" .env
+  sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=$DB_PASSWORD/" .env || echo "DB_PASSWORD=$DB_PASSWORD" >> .env
 fi
 
-# Ejecutar migraciones (solo si MySQL está listo)
-if [ $DB_READY -eq 1 ]; then
-  echo "Ejecutando migraciones..."
-  php artisan migrate --force || echo "ADVERTENCIA: Error al ejecutar migraciones"
-  
-  # Ejecutar seeders para crear datos iniciales (admin, barberos, etc.)
-  echo "Ejecutando seeders..."
-  php artisan db:seed --force || echo "ADVERTENCIA: Error al ejecutar seeders"
-else
-  echo "OMITIENDO migraciones y seeders debido a problemas de conexión a MySQL"
+# Generar clave de aplicación si no existe
+if [ -z "$APP_KEY" ] || grep -q "APP_KEY=$" .env; then
+  echo "Generando APP_KEY..."
+  php artisan key:generate --force || echo "ADVERTENCIA: No se pudo generar APP_KEY"
 fi
 
 # Limpiar caché
@@ -118,7 +61,14 @@ php artisan cache:clear
 php artisan route:clear
 php artisan view:clear
 
+# Ejecutar migraciones
+echo "Ejecutando migraciones..."
+php artisan migrate --force || echo "ADVERTENCIA: Error al ejecutar migraciones"
+
+# Ejecutar seeders (opcional, solo si es necesario)
+# echo "Ejecutando seeders..."
+# php artisan db:seed --force || echo "ADVERTENCIA: Error al ejecutar seeders"
+
+echo "Aplicación lista para iniciar"
+
 exec "$@"
-
-
-
