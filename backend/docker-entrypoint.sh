@@ -110,16 +110,22 @@ fi
 
 # Ejecutar migraciones PRIMERO (antes de limpiar caché)
 echo "Ejecutando migraciones..."
-php artisan migrate --force || {
+php artisan migrate --force 2>&1 || {
   echo "ADVERTENCIA: Error al ejecutar migraciones, continuando..."
+  echo "Detalles del error de migraciones:"
+  php artisan migrate --force 2>&1 | head -20 || true
 }
+
+# Asegurar permisos antes de limpiar caché
+chmod -R 775 storage/framework/cache 2>/dev/null || true
+chmod -R 775 bootstrap/cache 2>/dev/null || true
 
 # Limpiar caché DESPUÉS de las migraciones (con manejo de errores)
 echo "Limpiando caché..."
-php artisan config:clear || echo "ADVERTENCIA: No se pudo limpiar config cache"
-php artisan cache:clear || echo "ADVERTENCIA: No se pudo limpiar cache (tabla puede no existir aún)"
-php artisan route:clear || echo "ADVERTENCIA: No se pudo limpiar route cache"
-php artisan view:clear || echo "ADVERTENCIA: No se pudo limpiar view cache"
+php artisan config:clear 2>&1 || echo "ADVERTENCIA: No se pudo limpiar config cache"
+php artisan cache:clear 2>&1 || echo "ADVERTENCIA: No se pudo limpiar cache"
+php artisan route:clear 2>&1 || echo "ADVERTENCIA: No se pudo limpiar route cache"
+php artisan view:clear 2>&1 || echo "ADVERTENCIA: No se pudo limpiar view cache"
 
 # Construir el frontend si no existe
 if [ ! -d "public/frontend" ] || [ -z "$(ls -A public/frontend 2>/dev/null)" ]; then
