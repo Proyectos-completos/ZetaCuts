@@ -121,32 +121,38 @@ php artisan cache:clear || echo "ADVERTENCIA: No se pudo limpiar cache (tabla pu
 php artisan route:clear || echo "ADVERTENCIA: No se pudo limpiar route cache"
 php artisan view:clear || echo "ADVERTENCIA: No se pudo limpiar view cache"
 
-# Construir el frontend si no existe y está disponible el código fuente
+# Construir el frontend si no existe
 if [ ! -d "public/frontend" ] || [ -z "$(ls -A public/frontend 2>/dev/null)" ]; then
-  echo "Frontend no encontrado, intentando construir..."
+  echo "Frontend no encontrado, descargando y construyendo desde el repositorio..."
   
-  # Intentar desde diferentes ubicaciones posibles
-  FRONTEND_DIR=""
-  if [ -d "../frontend" ]; then
-    FRONTEND_DIR="../frontend"
-  elif [ -d "../../frontend" ]; then
-    FRONTEND_DIR="../../frontend"
-  elif [ -d "/tmp/frontend" ]; then
-    FRONTEND_DIR="/tmp/frontend"
+  # Obtener la URL del repositorio desde las variables de entorno de Render o Git
+  REPO_URL="${RENDER_GIT_REPO_URL:-}"
+  if [ -z "$REPO_URL" ] && [ -d ".git" ]; then
+    REPO_URL=$(git config --get remote.origin.url 2>/dev/null || echo "")
   fi
   
-  if [ ! -z "$FRONTEND_DIR" ] && [ -f "$FRONTEND_DIR/package.json" ]; then
-    echo "Construyendo frontend desde $FRONTEND_DIR..."
-    cd "$FRONTEND_DIR"
-    npm install --legacy-peer-deps || npm install
-    npm run build
-    mkdir -p /var/www/html/public/frontend
-    cp -r build/* /var/www/html/public/frontend/
-    cd /var/www/html
-    echo "Frontend construido exitosamente"
+  if [ ! -z "$REPO_URL" ]; then
+    echo "Clonando repositorio para obtener el frontend..."
+    cd /tmp
+    git clone --depth 1 --single-branch --branch main "$REPO_URL" repo_temp 2>/dev/null || \
+    git clone --depth 1 "$REPO_URL" repo_temp 2>/dev/null || true
+    
+    if [ -d "repo_temp/frontend" ] && [ -f "repo_temp/frontend/package.json" ]; then
+      echo "Construyendo frontend..."
+      cd repo_temp/frontend
+      npm install --legacy-peer-deps || npm install
+      npm run build
+      mkdir -p /var/www/html/public/frontend
+      cp -r build/* /var/www/html/public/frontend/
+      cd /var/www/html
+      rm -rf /tmp/repo_temp
+      echo "Frontend construido exitosamente"
+    else
+      echo "ADVERTENCIA: No se pudo encontrar el frontend en el repositorio"
+      rm -rf /tmp/repo_temp
+    fi
   else
-    echo "ADVERTENCIA: No se pudo encontrar el código fuente del frontend"
-    echo "Por favor, cambia el Root Directory en Render a vacío (raíz del repo)"
+    echo "ADVERTENCIA: No se pudo obtener la URL del repositorio para construir el frontend"
   fi
 fi
 
