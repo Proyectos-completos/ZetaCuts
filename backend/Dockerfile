@@ -40,23 +40,8 @@ RUN composer install --no-scripts --no-autoloader
 # Copiar el resto de los archivos del backend
 COPY . .
 
-# Construir el frontend desde el repositorio (si está disponible en el contexto)
-# Render puede tener acceso al repositorio completo durante el build
-WORKDIR /tmp
-RUN if [ -d "../frontend" ] && [ -f "../frontend/package.json" ]; then \
-        echo "Construyendo frontend desde ../frontend..."; \
-        cp -r ../frontend ./frontend && \
-        cd frontend && \
-        npm install --legacy-peer-deps || npm install && \
-        npm run build && \
-        mkdir -p /var/www/html/public/frontend && \
-        cp -r build/* /var/www/html/public/frontend/ && \
-        cd /tmp && rm -rf frontend && \
-        echo "Frontend construido exitosamente"; \
-    else \
-        echo "Frontend no encontrado en ../frontend, se construirá en tiempo de ejecución"; \
-    fi
-WORKDIR /var/www/html
+# El frontend se construirá en tiempo de ejecución por docker-entrypoint.sh
+# porque el contexto de build no incluye el directorio frontend/
 
 # Crear directorios necesarios y configurar permisos antes de composer
 RUN mkdir -p /var/www/html/bootstrap/cache \
