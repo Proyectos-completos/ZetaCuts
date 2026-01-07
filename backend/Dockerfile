@@ -1,6 +1,6 @@
 FROM php:8.2-cli
 
-# Instalar dependencias del sistema para Render
+# Instalar dependencias del sistema para Render (incluyendo Node.js para construir el frontend)
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -14,6 +14,10 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Instalar Node.js y npm para construir el frontend
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -33,8 +37,18 @@ COPY composer.json composer.lock ./
 # Instalar dependencias de PHP
 RUN composer install --no-scripts --no-autoloader
 
-# Copiar el resto de los archivos
+# Copiar el resto de los archivos del backend
 COPY . .
+
+# Construir el frontend y copiarlo al directorio public
+# Nota: Render ejecuta el build desde el root del repo, así que frontend/ está disponible
+WORKDIR /tmp/frontend
+COPY frontend/package.json frontend/package-lock.json* ./
+RUN npm install --legacy-peer-deps || npm install
+COPY frontend/ ./
+RUN npm run build
+RUN mkdir -p /var/www/html/public/frontend && cp -r build/* /var/www/html/public/frontend/
+WORKDIR /var/www/html
 
 # Crear directorios necesarios y configurar permisos antes de composer
 RUN mkdir -p /var/www/html/bootstrap/cache \
