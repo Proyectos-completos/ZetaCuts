@@ -35,10 +35,19 @@ RUN composer install --no-scripts --no-autoloader
 # Copiar el resto de los archivos
 COPY . .
 
+# Crear directorios necesarios y configurar permisos antes de composer
+RUN mkdir -p /var/www/html/bootstrap/cache \
+    && mkdir -p /var/www/html/storage/framework/cache \
+    && mkdir -p /var/www/html/storage/framework/sessions \
+    && mkdir -p /var/www/html/storage/framework/views \
+    && mkdir -p /var/www/html/storage/logs \
+    && chmod -R 775 /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage
+
 # Completar instalación de Composer
 RUN composer dump-autoload --optimize
 
-# Configurar permisos
+# Configurar permisos finales
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
