@@ -3,6 +3,9 @@
 
 echo "Iniciando aplicación Laravel..."
 
+# Limpiar caché de configuración al inicio para asegurar que lea el .env actualizado
+php artisan config:clear 2>/dev/null || true
+
 # Crear archivo .env si no existe, usando variables de entorno de Render
 if [ ! -f .env ]; then
   if [ -f .env.example ]; then
@@ -27,26 +30,57 @@ EOF
 fi
 
 # Actualizar .env con variables de entorno si están disponibles
+echo "Actualizando .env con variables de entorno de Render..."
+
 if [ ! -z "$APP_KEY" ]; then
-  sed -i "s/APP_KEY=.*/APP_KEY=$APP_KEY/" .env || echo "APP_KEY=$APP_KEY" >> .env
+  sed -i "s/APP_KEY=.*/APP_KEY=$APP_KEY/" .env 2>/dev/null || echo "APP_KEY=$APP_KEY" >> .env
 fi
+
+# Asegurar que DB_CONNECTION esté configurado
 if [ ! -z "$DB_CONNECTION" ]; then
-  sed -i "s/DB_CONNECTION=.*/DB_CONNECTION=$DB_CONNECTION/" .env || echo "DB_CONNECTION=$DB_CONNECTION" >> .env
+  sed -i "s/^DB_CONNECTION=.*/DB_CONNECTION=$DB_CONNECTION/" .env 2>/dev/null || (grep -q "^DB_CONNECTION=" .env || echo "DB_CONNECTION=$DB_CONNECTION" >> .env)
+else
+  # Si no está definido, usar pgsql por defecto
+  if ! grep -q "^DB_CONNECTION=" .env; then
+    echo "DB_CONNECTION=pgsql" >> .env
+  fi
 fi
+
+# Actualizar variables de base de datos (críticas para la conexión)
 if [ ! -z "$DB_HOST" ]; then
-  sed -i "s/DB_HOST=.*/DB_HOST=$DB_HOST/" .env || echo "DB_HOST=$DB_HOST" >> .env
+  sed -i "s/^DB_HOST=.*/DB_HOST=$DB_HOST/" .env 2>/dev/null || (grep -q "^DB_HOST=" .env || echo "DB_HOST=$DB_HOST" >> .env)
+  echo "DB_HOST configurado: $DB_HOST"
+else
+  echo "ADVERTENCIA: DB_HOST no está definido en variables de entorno"
 fi
+
 if [ ! -z "$DB_PORT" ]; then
-  sed -i "s/DB_PORT=.*/DB_PORT=$DB_PORT/" .env || echo "DB_PORT=$DB_PORT" >> .env
+  sed -i "s/^DB_PORT=.*/DB_PORT=$DB_PORT/" .env 2>/dev/null || (grep -q "^DB_PORT=" .env || echo "DB_PORT=$DB_PORT" >> .env)
+else
+  if ! grep -q "^DB_PORT=" .env; then
+    echo "DB_PORT=5432" >> .env
+  fi
 fi
+
 if [ ! -z "$DB_DATABASE" ]; then
-  sed -i "s/DB_DATABASE=.*/DB_DATABASE=$DB_DATABASE/" .env || echo "DB_DATABASE=$DB_DATABASE" >> .env
+  sed -i "s/^DB_DATABASE=.*/DB_DATABASE=$DB_DATABASE/" .env 2>/dev/null || (grep -q "^DB_DATABASE=" .env || echo "DB_DATABASE=$DB_DATABASE" >> .env)
+  echo "DB_DATABASE configurado: $DB_DATABASE"
+else
+  echo "ADVERTENCIA: DB_DATABASE no está definido en variables de entorno"
 fi
+
 if [ ! -z "$DB_USERNAME" ]; then
-  sed -i "s/DB_USERNAME=.*/DB_USERNAME=$DB_USERNAME/" .env || echo "DB_USERNAME=$DB_USERNAME" >> .env
+  sed -i "s/^DB_USERNAME=.*/DB_USERNAME=$DB_USERNAME/" .env 2>/dev/null || (grep -q "^DB_USERNAME=" .env || echo "DB_USERNAME=$DB_USERNAME" >> .env)
+  echo "DB_USERNAME configurado"
+else
+  echo "ADVERTENCIA: DB_USERNAME no está definido en variables de entorno"
 fi
+
 if [ ! -z "$DB_PASSWORD" ]; then
-  sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=$DB_PASSWORD/" .env || echo "DB_PASSWORD=$DB_PASSWORD" >> .env
+  sed -i "s/^DB_PASSWORD=.*/DB_PASSWORD=$DB_PASSWORD/" .env 2>/dev/null || (grep -q "^DB_PASSWORD=" .env || echo "DB_PASSWORD=$DB_PASSWORD" >> .env)
+  echo "DB_PASSWORD configurado"
+else
+  echo "ADVERTENCIA: DB_PASSWORD no está definido en variables de entorno"
 fi
 
 # FORZAR caché a usar archivos (no base de datos) para evitar errores antes de migraciones
@@ -55,6 +89,16 @@ if ! grep -q "^CACHE_STORE=" .env; then
 else
   sed -i "s/^CACHE_STORE=.*/CACHE_STORE=file/" .env
 fi
+
+# FORZAR sesiones a usar archivos (no base de datos) para evitar errores antes de migraciones
+if ! grep -q "^SESSION_DRIVER=" .env; then
+  echo "SESSION_DRIVER=file" >> .env
+else
+  sed -i "s/^SESSION_DRIVER=.*/SESSION_DRIVER=file/" .env
+fi
+
+# Limpiar caché de configuración DESPUÉS de actualizar .env para que Laravel lea los nuevos valores
+php artisan config:clear 2>/dev/null || true
 
 # Generar clave de aplicación si no existe
 if [ -z "$APP_KEY" ] || grep -q "APP_KEY=$" .env; then
