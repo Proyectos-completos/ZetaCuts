@@ -1,0 +1,62 @@
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Variables de entorno
+.env
+.env.local
+.env.production
+.env.staging
+
+# Dependencias
+node_modules/
+vendor/
+
+# Build
+dist/
+build/
+
+# Docker
+docker-data/
+
+# Base de datos
+*.sqlite
+*.db
+
+# Archivos temporales
+tmp/
+temp/
+
+# Frontend específico
+frontend/.env
+frontend/build/
+frontend/dist/
+frontend/node_modules/
+
+# Backend específico
+backend/.env
+backend/vendor/
+backend/storage/logs/
+backend/storage/framework/cache/
+backend/storage/framework/sessions/
+backend/storage/framework/views/
+backend/bootstrap/cache/
+backend/public/storage
+
+# Composer
+composer.phar
+# composer.lock debe estar en el repositorio
+
+# NPM
+# package-lock.json debe estar en el repositorio
+yarn.lock

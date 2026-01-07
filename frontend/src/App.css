@@ -1,0 +1,491 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8f9fa;
+  color: #333;
+  line-height: 1.6;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.gap-1 {
+  gap: 1rem;
+}
+
+.gap-2 {
+  gap: 2rem;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.mt-2 {
+  margin-top: 2rem;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+
+.btn:focus {
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: transparent;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: transparent;
+  color: white;
+  border: none;
+  box-shadow: none;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: white;
+  border: none;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: transparent;
+  color: white;
+  border: none;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+.form-control:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-control::placeholder {
+  color: #999;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f0f0f0;
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+header.navbar {
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+header.navbar .navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+header.navbar .navbar-brand h2 {
+  color: #dc3545;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 1px;
+  font-family: 'Playfair Display', serif;
+}
+
+header.navbar .navbar-nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  align-items: center;
+  position: static;
+  transform: none;
+}
+
+header.navbar .navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+header.navbar .nav-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: 'Oswald', sans-serif;
+}
+
+header.navbar .nav-link:hover {
+  color: #dc3545;
+}
+
+@media (max-width: 1100px) {
+  header.navbar .navbar-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0 1.25rem;
+  }
+
+  header.navbar .navbar-nav {
+    position: static;
+    transform: none;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  header.navbar .navbar-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  header.navbar .navbar-container {
+    align-items: center;
+  }
+
+  header.navbar .navbar-nav,
+  header.navbar .navbar-actions {
+    justify-content: center;
+    text-align: center;
+  }
+
+  header.navbar .nav-link {
+    font-size: 0.9rem;
+  }
+}
+
+.card-header {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0;
+  color: #333;
+}
+
+.card-body {
+  flex: 1;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+  
+  .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+.barber-stickers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.appointments-page,
+.store-page,
+.reviews-page,
+.recommendations-page,
+.information-page,
+.barberos-page,
+.product-detail-page {
+  position: relative;
+  min-height: 100vh;
+}
+
+.sticker.sticker-page {
+  position: absolute;
+  opacity: 0.35;
+  filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.3));
+  max-width: 100px;
+  height: auto;
+  animation: stickerFloat 6s ease-in-out infinite;
+  transition: opacity 0.3s ease;
+}
+
+.sticker.sticker-page:hover {
+  opacity: 0.5;
+}
+
+.appointments-page .barber-stickers .sticker-1,
+.store-page .barber-stickers .sticker-1,
+.reviews-page .barber-stickers .sticker-1,
+.recommendations-page .barber-stickers .sticker-1,
+.information-page .barber-stickers .sticker-1,
+.barberos-page .barber-stickers .sticker-1,
+.product-detail-page .barber-stickers .sticker-1 {
+  top: 15%;
+  left: 2%;
+  width: 85px;
+  animation-delay: 0s;
+  transform: rotate(-12deg);
+}
+
+.appointments-page .barber-stickers .sticker-2,
+.store-page .barber-stickers .sticker-2,
+.reviews-page .barber-stickers .sticker-2,
+.recommendations-page .barber-stickers .sticker-2,
+.information-page .barber-stickers .sticker-2,
+.barberos-page .barber-stickers .sticker-2,
+.product-detail-page .barber-stickers .sticker-2 {
+  top: 35%;
+  left: 1%;
+  width: 80px;
+  animation-delay: 1.2s;
+  transform: rotate(10deg);
+}
+
+.appointments-page .barber-stickers .sticker-3,
+.store-page .barber-stickers .sticker-3,
+.reviews-page .barber-stickers .sticker-3,
+.recommendations-page .barber-stickers .sticker-3,
+.information-page .barber-stickers .sticker-3,
+.barberos-page .barber-stickers .sticker-3,
+.product-detail-page .barber-stickers .sticker-3 {
+  top: 55%;
+  left: 3%;
+  width: 90px;
+  animation-delay: 2.4s;
+  transform: rotate(-8deg);
+}
+
+.appointments-page .barber-stickers .sticker-4,
+.store-page .barber-stickers .sticker-4,
+.reviews-page .barber-stickers .sticker-4,
+.recommendations-page .barber-stickers .sticker-4,
+.information-page .barber-stickers .sticker-4,
+.barberos-page .barber-stickers .sticker-4,
+.product-detail-page .barber-stickers .sticker-4 {
+  top: 20%;
+  right: 2%;
+  width: 88px;
+  animation-delay: 0.8s;
+  transform: rotate(12deg);
+}
+
+.appointments-page .barber-stickers .sticker-5,
+.store-page .barber-stickers .sticker-5,
+.reviews-page .barber-stickers .sticker-5,
+.barberos-page .barber-stickers .sticker-5,
+.product-detail-page .barber-stickers .sticker-5 {
+  top: 50%;
+  right: 1%;
+  width: 85px;
+  animation-delay: 1.8s;
+  transform: rotate(-10deg);
+}
+
+.appointments-page .barber-stickers .sticker-6,
+.store-page .barber-stickers .sticker-6,
+.barberos-page .barber-stickers .sticker-6,
+.product-detail-page .barber-stickers .sticker-6 {
+  top: 70%;
+  left: 2%;
+  width: 82px;
+  animation-delay: 3s;
+  transform: rotate(8deg);
+}
+
+.appointments-page .barber-stickers .sticker-7,
+.barberos-page .barber-stickers .sticker-7 {
+  top: 85%;
+  right: 3%;
+  width: 80px;
+  animation-delay: 3.5s;
+  transform: rotate(-12deg);
+}
+
+@keyframes stickerFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(var(--rotation, 0deg));
+  }
+  25% {
+    transform: translateY(-15px) rotate(calc(var(--rotation, 0deg) + 5deg));
+  }
+  50% {
+    transform: translateY(-25px) rotate(var(--rotation, 0deg));
+  }
+  75% {
+    transform: translateY(-15px) rotate(calc(var(--rotation, 0deg) - 5deg));
+  }
+}
+
+@media (max-width: 1100px) {
+  .barber-stickers {
+    display: none;
+  }
+}

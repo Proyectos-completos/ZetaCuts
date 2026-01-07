@@ -1,0 +1,649 @@
+
+.barbero-appointments-page {
+  min-height: 100vh;
+  background: #ffffff;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(220, 53, 69, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.03) 0%, transparent 50%);
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.barbero-appointments-page .container {
+  padding: 6rem 1rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.barbero-appointments-page .barberos-header {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.barbero-appointments-page .barberos-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(220, 53, 69, 0.05), transparent);
+  transition: left 0.5s ease;
+}
+
+.barbero-appointments-page .barberos-header:hover::before {
+  left: 100%;
+}
+
+.barbero-appointments-page .barberos-header h1 {
+  color: #333;
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 0;
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  animation: fadeInScale 0.9s ease-out 0.2s both, titleGlow 3s ease-in-out infinite 1.2s;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.barbero-appointments-page .barberos-header h1::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #dc3545, #6366f1, #dc3545);
+  animation: underlineExpand 1.2s ease-out 0.8s forwards;
+  border-radius: 2px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes titleGlow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes underlineExpand {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.barbero-appointments-page .barberos-header p {
+  margin-top: 1rem;
+  color: #6c757d;
+  font-size: 1.1rem;
+  animation: fadeIn 0.8s ease-out 0.5s both;
+}
+
+.barbero-appointments-page .appointments-table-container {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  overflow-y: hidden;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.barbero-appointments-page .appointments-table-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+}
+
+.barbero-appointments-page .appointments-table-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-height: none;
+}
+
+.barbero-appointments-page table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.barbero-appointments-page tbody tr {
+  border-bottom: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+  animation: fadeInRow 0.5s ease-out both;
+  height: auto;
+}
+
+.barbero-appointments-page thead tr {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-bottom: 3px solid #dee2e6;
+  animation: slideInRight 0.6s ease-out 0.6s both;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.barbero-appointments-page thead th {
+  padding: 1.25rem 1rem;
+  text-align: left;
+  font-weight: 700;
+  color: #495057;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.barbero-appointments-page thead th:nth-child(2) {
+  text-align: center;
+}
+
+.barbero-appointments-page thead th:nth-child(6) {
+  text-align: center;
+}
+
+.barbero-appointments-page thead th::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #dc3545, #6366f1);
+  transition: width 0.3s ease;
+}
+
+.barbero-appointments-page thead th:hover::after {
+  width: 100%;
+}
+
+.barbero-appointments-page tbody tr {
+  border-bottom: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+  animation: fadeInRow 0.5s ease-out both;
+}
+
+.barbero-appointments-page tbody tr:nth-child(even) {
+  background: #f8f9fa;
+}
+
+.barbero-appointments-page tbody tr:hover {
+  background: linear-gradient(90deg, #fff, #f8f9fa);
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes fadeInRow {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.barbero-appointments-page tbody td {
+  padding: 1.25rem 1rem;
+  color: #495057;
+  transition: color 0.3s ease;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.barbero-appointments-page tbody tr:hover td {
+  color: #212529;
+}
+
+.barbero-appointments-page .date-cell {
+  white-space: nowrap;
+  font-weight: 500;
+  min-width: 180px;
+}
+
+.barbero-appointments-page .time-cell {
+  white-space: nowrap;
+  font-weight: 600;
+  text-align: center;
+  min-width: 80px;
+}
+
+.barbero-appointments-page .client-cell {
+  white-space: nowrap;
+  font-weight: 500;
+  min-width: 120px;
+}
+
+.barbero-appointments-page .status-cell {
+  white-space: nowrap;
+  text-align: center;
+  min-width: 140px;
+}
+
+.barbero-appointments-page .actions-cell {
+  white-space: nowrap;
+  min-width: 160px;
+}
+
+.barbero-appointments-page .service-cell {
+  font-weight: 500;
+  min-width: 300px;
+  max-width: 500px;
+  vertical-align: top;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.barbero-appointments-page .service-with-tinte {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.barbero-appointments-page .service-main-text {
+  white-space: nowrap;
+  font-weight: 600;
+  color: #212529;
+  line-height: 1.4;
+}
+
+.barbero-appointments-page .tinte-info-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.barbero-appointments-page .tinte-info {
+  white-space: normal;
+  word-break: break-word;
+}
+
+.barbero-appointments-page .service-cell .color-indicator {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  flex-shrink: 0;
+}
+
+.barbero-appointments-page .service-cell .service-main {
+  color: #212529;
+  font-weight: 600;
+}
+
+.barbero-appointments-page .service-cell .service-tinte {
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.barbero-appointments-page .service-cell .color-indicator {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.barbero-appointments-page .service-cell .color-indicator:hover {
+  transform: scale(1.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Price Column */
+.barbero-appointments-page .price-cell {
+  font-weight: 700;
+  color: #28a745;
+  font-size: 1.05rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.barbero-appointments-page .status-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: fadeInScale 0.5s ease-out both;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: 'Oswald', sans-serif;
+}
+
+.barbero-appointments-page .status-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.barbero-appointments-page .status-pending {
+  background: linear-gradient(135deg, #ffc107, #ffb300);
+  color: #212529;
+}
+
+.barbero-appointments-page .status-confirmed {
+  background: linear-gradient(135deg, #17a2b8, #138496);
+  color: #000000 !important;
+}
+
+.barbero-appointments-page .status-cancelled {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: #000000 !important;
+}
+
+.barbero-appointments-page .status-completed {
+  background: linear-gradient(135deg, #28a745, #218838);
+  color: #000000 !important;
+}
+
+.barbero-appointments-page .action-buttons {
+  display: inline-flex;
+  gap: 0.4rem;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.barbero-appointments-page .btn-action {
+  padding: 0.4rem 0.7rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-family: 'Oswald', sans-serif;
+}
+
+.barbero-appointments-page .btn-action::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.barbero-appointments-page .btn-action:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.barbero-appointments-page .btn-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.barbero-appointments-page .btn-action:active {
+  transform: translateY(0);
+}
+
+.barbero-appointments-page .btn-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.barbero-appointments-page .btn-complete {
+  background: linear-gradient(135deg, #28a745, #218838);
+  color: #000000 !important;
+}
+
+.barbero-appointments-page .btn-complete:hover {
+  background: linear-gradient(135deg, #218838, #1e7e34);
+  color: #000000 !important;
+}
+
+.barbero-appointments-page .btn-cancel {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: #000000 !important;
+}
+
+.barbero-appointments-page .btn-cancel:hover {
+  background: linear-gradient(135deg, #c82333, #bd2130);
+  color: #000000 !important;
+}
+
+.barbero-appointments-page .btn-delete {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: #000000 !important;
+  padding: 0.5rem 1rem;
+}
+
+.barbero-appointments-page .btn-delete:hover {
+  background: linear-gradient(135deg, #c82333, #bd2130);
+  color: #000000 !important;
+}
+
+.barbero-appointments-page .loading-container,
+.barbero-appointments-page .empty-container {
+  text-align: center;
+  padding: 3rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.barbero-appointments-page .empty-container p {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .barbero-appointments-page .barberos-header h1 {
+    font-size: 2rem;
+  }
+  
+  .barbero-appointments-page thead th,
+  .barbero-appointments-page tbody td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.85rem;
+  }
+  
+  .barbero-appointments-page .action-buttons {
+    flex-direction: column;
+  }
+  
+  .barbero-appointments-page .btn-action {
+    width: 100%;
+  }
+}
+
+.barbero-appointments-page tbody tr:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.barbero-appointments-page tbody tr:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.barbero-appointments-page tbody tr:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.barbero-appointments-page tbody tr:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.barbero-appointments-page tbody tr:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+.barbero-appointments-page tbody tr:nth-child(n+6) {
+  animation-delay: 0.6s;
+}
+
+.barbero-appointments-page .barber-stickers {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.barbero-appointments-page .sticker {
+  position: absolute;
+  width: 100px;
+  height: auto;
+  opacity: 0.6;
+  animation: stickerFloat 4s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+.barbero-appointments-page .sticker-page.sticker-1 {
+  top: 10%;
+  left: 2%;
+  width: 90px;
+  animation-delay: 0s;
+  transform: rotate(-15deg);
+}
+
+.barbero-appointments-page .sticker-page.sticker-2 {
+  top: 30%;
+  left: 1%;
+  width: 85px;
+  animation-delay: 1.2s;
+  transform: rotate(10deg);
+}
+
+.barbero-appointments-page .sticker-page.sticker-3 {
+  top: 60%;
+  left: 3%;
+  width: 95px;
+  animation-delay: 2.4s;
+  transform: rotate(-8deg);
+}
+
+.barbero-appointments-page .sticker-page.sticker-4 {
+  top: 20%;
+  right: 2%;
+  width: 88px;
+  animation-delay: 0.8s;
+  transform: rotate(12deg);
+}
+
+.barbero-appointments-page .sticker-page.sticker-5 {
+  top: 55%;
+  right: 1%;
+  width: 92px;
+  animation-delay: 1.8s;
+  transform: rotate(-10deg);
+}
+
+.barbero-appointments-page .sticker-page.sticker-6 {
+  top: 5%;
+  left: 1%;
+  width: 80px;
+  animation-delay: 0.5s;
+  transform: rotate(-12deg);
+}
+
+.barbero-appointments-page .sticker-page.sticker-7 {
+  top: 75%;
+  right: 3%;
+  width: 87px;
+  animation-delay: 2.8s;
+  transform: rotate(8deg);
+}
+
+@keyframes stickerFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(var(--rotation, 0deg));
+  }
+  50% {
+    transform: translateY(-20px) rotate(var(--rotation, 0deg));
+  }
+}
+
+@media (max-width: 1100px) {
+  .barbero-appointments-page .barber-stickers {
+    display: none;
+  }
+}
