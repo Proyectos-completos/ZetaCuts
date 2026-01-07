@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e
+# No usar set -e aquí porque queremos manejar errores manualmente
 
 echo "Iniciando aplicación Laravel..."
 
@@ -49,15 +49,26 @@ if [ ! -z "$DB_PASSWORD" ]; then
   sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=$DB_PASSWORD/" .env || echo "DB_PASSWORD=$DB_PASSWORD" >> .env
 fi
 
+# FORZAR caché a usar archivos (no base de datos) para evitar errores antes de migraciones
+if ! grep -q "^CACHE_STORE=" .env; then
+  echo "CACHE_STORE=file" >> .env
+else
+  sed -i "s/^CACHE_STORE=.*/CACHE_STORE=file/" .env
+fi
+
 # Generar clave de aplicación si no existe
 if [ -z "$APP_KEY" ] || grep -q "APP_KEY=$" .env; then
   echo "Generando APP_KEY..."
-  php artisan key:generate --force || echo "ADVERTENCIA: No se pudo generar APP_KEY"
+  php artisan key:generate --force || {
+    echo "ADVERTENCIA: No se pudo generar APP_KEY, continuando..."
+  }
 fi
 
 # Ejecutar migraciones PRIMERO (antes de limpiar caché)
 echo "Ejecutando migraciones..."
-php artisan migrate --force || echo "ADVERTENCIA: Error al ejecutar migraciones"
+php artisan migrate --force || {
+  echo "ADVERTENCIA: Error al ejecutar migraciones, continuando..."
+}
 
 # Limpiar caché DESPUÉS de las migraciones (con manejo de errores)
 echo "Limpiando caché..."
