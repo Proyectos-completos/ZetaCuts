@@ -17,11 +17,13 @@ return [
         'http://127.0.0.1:3001',
         'https://zetacuts-frontend.onrender.com',
         'http://zetacuts-frontend.onrender.com',
+        'https://zetacuts-frontend-hdqr.onrender.com',
+        'http://zetacuts-frontend-hdqr.onrender.com',
     ],
 
     'allowed_origins_patterns' => [
-        '/^https:\/\/.*\.onrender\.app$/',
-        '/^http:\/\/.*\.onrender\.app$/',
+        '/^https:\/\/.*\.onrender\.com$/',
+        '/^http:\/\/.*\.onrender\.com$/',
     ],
 
     'allowed_headers' => ['*'],
