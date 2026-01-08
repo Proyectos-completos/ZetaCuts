@@ -38,7 +38,13 @@ const ProductDetail = () => {
         }
       } catch (err) {
         console.error('Error loading product', err);
-        setError('No pudimos cargar el producto.');
+        if (err.response?.status === 404) {
+          setError('No encontramos el producto.');
+        } else if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
+          setError('El servidor está tardando en responder. Por favor, espera unos segundos e intenta nuevamente.');
+        } else {
+          setError('No pudimos cargar el producto. Verifica tu conexión e intenta nuevamente.');
+        }
       } finally {
         setLoading(false);
       }
