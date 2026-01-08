@@ -31,7 +31,7 @@ const ProductDetail = () => {
       setError('');
       try {
         const response = await productService.getByIdOrSlug(productIdOrSlug);
-        if (response?.success) {
+        if (response?.success && response?.data) {
           setProduct(response.data);
         } else {
           setError('No encontramos el producto.');
@@ -42,6 +42,8 @@ const ProductDetail = () => {
           setError('No encontramos el producto.');
         } else if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
           setError('El servidor está tardando en responder. Por favor, espera unos segundos e intenta nuevamente.');
+        } else if (err.response?.status >= 500) {
+          setError('Error del servidor. Por favor, intenta nuevamente en unos momentos.');
         } else {
           setError('No pudimos cargar el producto. Verifica tu conexión e intenta nuevamente.');
         }
@@ -50,7 +52,9 @@ const ProductDetail = () => {
       }
     };
 
-    fetchProduct();
+    if (productIdOrSlug) {
+      fetchProduct();
+    }
   }, [productIdOrSlug]);
 
   const formatPrice = (value) => {
