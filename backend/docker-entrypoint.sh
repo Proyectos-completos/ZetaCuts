@@ -3,6 +3,30 @@
 
 echo "Iniciando aplicación Laravel..."
 
+# Parse DATABASE_URL si está disponible (Render proporciona esto automáticamente)
+if [ ! -z "$DATABASE_URL" ]; then
+  echo "Parseando DATABASE_URL..."
+  # Formato: postgresql://user:password@host:port/database o postgres://user:password@host:port/database
+  DB_URL=$(echo "$DATABASE_URL" | sed 's|postgresql://||' | sed 's|postgres://||')
+  DB_USERNAME=$(echo "$DB_URL" | cut -d: -f1)
+  DB_PASSWORD=$(echo "$DB_URL" | cut -d: -f2 | cut -d@ -f1)
+  DB_HOST_PORT=$(echo "$DB_URL" | cut -d@ -f2 | cut -d/ -f1)
+  DB_HOST=$(echo "$DB_HOST_PORT" | cut -d: -f1)
+  DB_PORT=$(echo "$DB_HOST_PORT" | cut -d: -f2)
+  DB_DATABASE=$(echo "$DB_URL" | cut -d/ -f2)
+  
+  export DB_HOST=${DB_HOST:-$DB_HOST}
+  export DB_PORT=${DB_PORT:-${DB_PORT:-5432}}
+  export DB_DATABASE=${DB_DATABASE:-$DB_DATABASE}
+  export DB_USERNAME=${DB_USERNAME:-$DB_USERNAME}
+  export DB_PASSWORD=${DB_PASSWORD:-$DB_PASSWORD}
+  
+  echo "DATABASE_URL parseado - DB_HOST: $DB_HOST, DB_DATABASE: $DB_DATABASE"
+fi
+
+# FORZAR PostgreSQL como conexión por defecto SIEMPRE
+export DB_CONNECTION=pgsql
+
 # Limpiar caché de configuración al inicio para asegurar que lea el .env actualizado
 php artisan config:clear 2>/dev/null || true
 
@@ -36,15 +60,9 @@ if [ ! -z "$APP_KEY" ]; then
   sed -i "s/APP_KEY=.*/APP_KEY=$APP_KEY/" .env 2>/dev/null || echo "APP_KEY=$APP_KEY" >> .env
 fi
 
-# Asegurar que DB_CONNECTION esté configurado
-if [ ! -z "$DB_CONNECTION" ]; then
-  sed -i "s/^DB_CONNECTION=.*/DB_CONNECTION=$DB_CONNECTION/" .env 2>/dev/null || (grep -q "^DB_CONNECTION=" .env || echo "DB_CONNECTION=$DB_CONNECTION" >> .env)
-else
-  # Si no está definido, usar pgsql por defecto
-  if ! grep -q "^DB_CONNECTION=" .env; then
-    echo "DB_CONNECTION=pgsql" >> .env
-  fi
-fi
+# FORZAR DB_CONNECTION=pgsql siempre (antes de configurar otras variables)
+sed -i "s/^DB_CONNECTION=.*/DB_CONNECTION=pgsql/" .env 2>/dev/null || echo "DB_CONNECTION=pgsql" >> .env
+echo "DB_CONNECTION forzado a: pgsql"
 
 # Actualizar variables de base de datos (críticas para la conexión)
 if [ ! -z "$DB_HOST" ]; then
