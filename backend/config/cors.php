@@ -20,7 +20,8 @@ return [
     ],
 
     'allowed_origins_patterns' => [
-        '/^https:\/\/.*\.vercel\.app$/',
+        '/^https:\/\/.*\.onrender\.app$/',
+        '/^http:\/\/.*\.onrender\.app$/',
     ],
 
     'allowed_headers' => ['*'],
