@@ -6,7 +6,7 @@ echo "Iniciando aplicación Laravel..."
 # Limpiar caché de configuración al inicio para asegurar que lea el .env actualizado
 php artisan config:clear 2>/dev/null || true
 
-# Crear archivo .env si no existe, usando variables de entorno (Railway/Render)
+# Crear archivo .env si no existe, usando variables de entorno de Render
 if [ ! -f .env ]; then
   if [ -f .env.example ]; then
     cp .env.example .env
@@ -30,7 +30,7 @@ EOF
 fi
 
 # Actualizar .env con variables de entorno si están disponibles
-echo "Actualizando .env con variables de entorno..."
+echo "Actualizando .env con variables de entorno de Render..."
 
 if [ ! -z "$APP_KEY" ]; then
   sed -i "s/APP_KEY=.*/APP_KEY=$APP_KEY/" .env 2>/dev/null || echo "APP_KEY=$APP_KEY" >> .env
@@ -117,8 +117,10 @@ php artisan migrate --force 2>&1 || {
 }
 
 # Asegurar permisos antes de limpiar caché
-chmod -R 775 storage/framework/cache 2>/dev/null || true
-chmod -R 775 bootstrap/cache 2>/dev/null || true
+chmod -R 777 storage/framework/cache 2>/dev/null || true
+chmod -R 777 storage/framework/sessions 2>/dev/null || true
+chmod -R 777 storage/framework/views 2>/dev/null || true
+chmod -R 777 bootstrap/cache 2>/dev/null || true
 
 # Limpiar caché DESPUÉS de las migraciones (con manejo de errores)
 echo "Limpiando caché..."
