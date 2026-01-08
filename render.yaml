@@ -35,9 +35,10 @@ services:
 
   - type: web
     name: zetacuts-frontend
+    runtime: node
     plan: free
     buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/build
+    startCommand: cd frontend && npx serve -s build -l $PORT
     envVars:
       - key: REACT_APP_API_URL
         value: https://zetacuts-backend.onrender.com/api
