@@ -60,12 +60,13 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Exponer puerto 8000
-EXPOSE 8000
+# Exponer puerto (Railway usa PORT automáticamente, default 8000)
+EXPOSE ${PORT:-8000}
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# Railway provee PORT automáticamente, usamos 8000 como default
+CMD sh -c "php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"
 
 
 
