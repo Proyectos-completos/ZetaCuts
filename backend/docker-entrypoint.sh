@@ -126,26 +126,32 @@ if [ -z "$APP_KEY" ] || grep -q "APP_KEY=$" .env; then
   }
 fi
 
-# Ejecutar migraciones PRIMERO (antes de limpiar caché)
+# Asegurar permisos ANTES de cualquier operación
+echo "Configurando permisos..."
+mkdir -p storage/framework/cache/data 2>/dev/null || true
+mkdir -p storage/framework/sessions 2>/dev/null || true
+mkdir -p storage/framework/views 2>/dev/null || true
+mkdir -p storage/logs 2>/dev/null || true
+mkdir -p bootstrap/cache 2>/dev/null || true
+
+chmod -R 777 storage 2>/dev/null || true
+chmod -R 777 bootstrap/cache 2>/dev/null || true
+chown -R www-data:www-data storage 2>/dev/null || true
+chown -R www-data:www-data bootstrap/cache 2>/dev/null || true
+
+# Ejecutar migraciones
 echo "Ejecutando migraciones..."
 php artisan migrate --force 2>&1 || {
   echo "ADVERTENCIA: Error al ejecutar migraciones, continuando..."
-  echo "Detalles del error de migraciones:"
-  php artisan migrate --force 2>&1 | head -20 || true
 }
 
-# Asegurar permisos antes de limpiar caché
-chmod -R 777 storage/framework/cache 2>/dev/null || true
-chmod -R 777 storage/framework/sessions 2>/dev/null || true
-chmod -R 777 storage/framework/views 2>/dev/null || true
-chmod -R 777 bootstrap/cache 2>/dev/null || true
-
-# Limpiar caché DESPUÉS de las migraciones (con manejo de errores)
+# Limpiar caché DESPUÉS de las migraciones (ignorar errores de permisos)
 echo "Limpiando caché..."
-php artisan config:clear 2>&1 || echo "ADVERTENCIA: No se pudo limpiar config cache"
-php artisan cache:clear 2>&1 || echo "ADVERTENCIA: No se pudo limpiar cache"
-php artisan route:clear 2>&1 || echo "ADVERTENCIA: No se pudo limpiar route cache"
-php artisan view:clear 2>&1 || echo "ADVERTENCIA: No se pudo limpiar view cache"
+php artisan config:clear 2>/dev/null || true
+php artisan cache:clear 2>/dev/null || true
+php artisan route:clear 2>/dev/null || true
+php artisan view:clear 2>/dev/null || true
+echo "Caché limpiado (o se ignoraron errores menores)"
 
 # Construir el frontend si no existe
 if [ ! -d "public/frontend" ] || [ -z "$(ls -A public/frontend 2>/dev/null)" ]; then

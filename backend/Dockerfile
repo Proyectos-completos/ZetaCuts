@@ -55,10 +55,14 @@ RUN mkdir -p /var/www/html/bootstrap/cache \
 # Completar instalación de Composer
 RUN composer dump-autoload --optimize
 
-# Configurar permisos finales
+# Configurar permisos finales (más permisivos para Render)
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
+    && chmod -R 777 /var/www/html/storage \
+    && chmod -R 777 /var/www/html/bootstrap/cache \
+    && mkdir -p /var/www/html/storage/framework/cache/data \
+    && mkdir -p /var/www/html/storage/framework/sessions \
+    && mkdir -p /var/www/html/storage/framework/views \
+    && chmod -R 777 /var/www/html/storage/framework
 
 # Exponer puerto (Render usa PORT automáticamente, default 8000)
 EXPOSE 8000
