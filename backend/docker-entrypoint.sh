@@ -182,4 +182,10 @@ fi
 
 echo "Aplicación lista para iniciar"
 
-exec "$@"
+# Render requiere que la aplicación escuche en el puerto especificado por PORT
+# Si PORT no está definido, usar 8000 como default
+LISTEN_PORT=${PORT:-8000}
+echo "Iniciando servidor en puerto: $LISTEN_PORT"
+
+# Iniciar Laravel en el puerto correcto
+exec php artisan serve --host=0.0.0.0 --port=$LISTEN_PORT

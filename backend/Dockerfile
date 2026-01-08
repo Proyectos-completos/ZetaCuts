@@ -61,12 +61,12 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
 # Exponer puerto (Render usa PORT automáticamente, default 8000)
-EXPOSE ${PORT:-8000}
+EXPOSE 8000
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
-# Render proporciona PORT automáticamente, usamos 8000 como default
-CMD sh -c "php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"
+# El docker-entrypoint.sh manejará el inicio del servidor con PORT
+CMD ["php", "artisan", "serve"]
 
 
 
