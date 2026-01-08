@@ -21,10 +21,6 @@ ZetaCuts/
 ### Requisitos
 - Docker Desktop (Windows/Mac) o Docker Engine + Docker Compose (Linux)
 
-### ⚠️ Problema Común: "Virtualization support not detected"
-
-Si Docker Desktop muestra este error, consulta **[SOLUCION_VIRTUALIZACION.md](./SOLUCION_VIRTUALIZACION.md)** para resolverlo paso a paso.
-
 ### Comandos
 
 ```bash
@@ -37,8 +33,6 @@ docker-compose logs -f
 # Detener servicios
 docker-compose down
 ```
-
-**📖 Para instrucciones detalladas, consulta [DOCKER_SETUP.md](./DOCKER_SETUP.md)**
 
 ### Acceso a la Aplicación
 - **Frontend**: http://localhost:3000
@@ -75,8 +69,3 @@ php artisan serve
 
 1. El frontend se ejecuta en `http://localhost:3000`
 2. El backend se ejecuta en `http://localhost:8000`
-
-## Documentación
-
-- **Configuración Docker**: Ver [DOCKER_SETUP.md](./DOCKER_SETUP.md)
-- **Documentación adicional**: Ver la carpeta `docs/`
