@@ -28,7 +28,6 @@ const api = axios.create({
     'Accept': 'application/json',
   },
   withCredentials: true,
-  timeout: 60000, // 60 segundos para dar tiempo al spin down de Render
 });
 
 /**

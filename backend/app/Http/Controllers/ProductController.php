@@ -64,29 +64,40 @@ class ProductController extends Controller
 
 public function show(Request $request, $id)
     {
-        $isAdmin = $request->user()?->isAdmin() ?? false;
+        try {
+            $isAdmin = $request->user()?->isAdmin() ?? false;
 
-        $productQuery = Product::query();
+            $productQuery = Product::query();
 
-        if (!$isAdmin) {
-            $productQuery->where('is_active', true);
-        }
+            if (!$isAdmin) {
+                $productQuery->where('is_active', true);
+            }
 
-        $product = $productQuery->where(function ($query) use ($id) {
-            $query->where('id', $id)->orWhere('slug', $id);
-        })->first();
+            // Si es numérico, buscar por ID, si no, buscar por slug
+            if (is_numeric($id)) {
+                $product = $productQuery->where('id', (int)$id)->first();
+            } else {
+                $product = $productQuery->where('slug', $id)->first();
+            }
 
-        if (!$product) {
+            if (!$product) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Producto no encontrado',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $product,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error en ProductController@show: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'Producto no encontrado',
-            ], 404);
+                'message' => 'Error al cargar el producto',
+            ], 500);
         }
-
-        return response()->json([
-            'success' => true,
-            'data' => $product,
-        ]);
     }
 
 public function store(Request $request)
