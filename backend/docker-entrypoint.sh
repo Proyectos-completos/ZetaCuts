@@ -44,6 +44,9 @@ SERVER_PID=$!
 
   php artisan migrate --force --no-interaction 2>/dev/null || true
 
+  # Ejecutar seeders para crear usuario admin automáticamente
+  php artisan db:seed --force --no-interaction 2>/dev/null || true
+
   php artisan config:clear 2>/dev/null || true
   php artisan cache:clear 2>/dev/null || true
   php artisan route:clear 2>/dev/null || true
