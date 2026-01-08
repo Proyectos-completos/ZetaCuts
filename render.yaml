@@ -33,18 +33,12 @@ services:
       - key: SANCTUM_STATEFUL_DOMAINS
         value: localhost,localhost:3000,*.onrender.com
 
-  - type: static_site
+  - type: web
     name: zetacuts-frontend
     plan: free
-    rootDir: frontend
-    buildCommand: npm ci && npm run build
-    staticPublishPath: build
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/build
     envVars:
-      # Si el backend queda con otro subdominio, solo cambia este valor en Render y redeploy.
       - key: REACT_APP_API_URL
         value: https://zetacuts-backend.onrender.com/api
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
 
