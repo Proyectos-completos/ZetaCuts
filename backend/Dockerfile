@@ -64,13 +64,10 @@ RUN chown -R www-data:www-data /var/www/html \
     && mkdir -p /var/www/html/storage/framework/views \
     && chmod -R 777 /var/www/html/storage/framework
 
-# Exponer puerto (Render usa PORT automáticamente, default 8000)
+# Exponer puerto (Render detecta automáticamente)
 EXPOSE 8000
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-
-# El docker-entrypoint.sh manejará el inicio del servidor con PORT
-CMD ["php", "artisan", "serve"]
 
 
 
