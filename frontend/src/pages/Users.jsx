@@ -25,6 +25,8 @@ const Users = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 10;
 
   useEffect(() => {
     if (authLoading) {
@@ -59,7 +61,9 @@ const Users = () => {
     }
   };
 
-useEffect(() => {
+  const [filteredUsers, setFilteredUsers] = useState([]);
+
+  useEffect(() => {
     let filtered = [...allUsers];
 
     if (searchName.trim()) {
@@ -74,7 +78,7 @@ useEffect(() => {
       );
     }
 
-if (filterType !== 'all') {
+    if (filterType !== 'all') {
       filtered = filtered.filter(user => {
         
         const isBarbero = Boolean(user.is_barbero);
@@ -91,7 +95,7 @@ if (filterType !== 'all') {
       });
     }
 
-filtered.sort((a, b) => {
+    filtered.sort((a, b) => {
       if (sortOrder === 'asc') {
         return a.id - b.id; 
       } else {
@@ -99,8 +103,20 @@ filtered.sort((a, b) => {
       }
     });
 
-    setUsers(filtered);
+    setFilteredUsers(filtered);
+    setCurrentPage(1); // Reset a la primera página cuando cambian los filtros
   }, [searchName, searchId, sortOrder, filterType, allUsers]);
+
+  // Paginación
+  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+  const startIndex = (currentPage - 1) * usersPerPage;
+  const endIndex = startIndex + usersPerPage;
+
+  // Actualizar users con los usuarios paginados cuando cambian los filtros o la página
+  useEffect(() => {
+    const paginated = filteredUsers.slice(startIndex, endIndex);
+    setUsers(paginated);
+  }, [filteredUsers, currentPage, startIndex, endIndex]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -455,14 +471,103 @@ filtered.sort((a, b) => {
         <div className="users-results-count">
           {searchName || searchId || filterType !== 'all' ? (
             <>
-              Mostrando <strong>{users.length}</strong> de <strong>{allUsers.length}</strong> usuarios
+              Mostrando <strong>{startIndex + 1}-{Math.min(endIndex, filteredUsers.length)}</strong> de <strong>{filteredUsers.length}</strong> usuarios encontrados
             </>
           ) : (
             <>
-              Total de usuarios: <strong>{users.length}</strong>
+              Mostrando <strong>{startIndex + 1}-{Math.min(endIndex, filteredUsers.length)}</strong> de <strong>{filteredUsers.length}</strong> usuarios
             </>
           )}
         </div>
+
+        {totalPages > 1 && (
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            gap: '0.5rem', 
+            marginTop: '2rem',
+            flexWrap: 'wrap'
+          }}>
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              disabled={currentPage === 1}
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: currentPage === 1 ? '#e9ecef' : '#007bff',
+                color: currentPage === 1 ? '#6c757d' : 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                fontSize: '0.875rem',
+                fontWeight: '500'
+              }}
+            >
+              Anterior
+            </button>
+
+            <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
+                if (
+                  page === 1 ||
+                  page === totalPages ||
+                  (page >= currentPage - 2 && page <= currentPage + 2)
+                ) {
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      style={{
+                        padding: '0.5rem 0.75rem',
+                        backgroundColor: currentPage === page ? '#007bff' : 'white',
+                        color: currentPage === page ? 'white' : '#007bff',
+                        border: '1px solid #007bff',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        fontSize: '0.875rem',
+                        fontWeight: currentPage === page ? '600' : '400',
+                        minWidth: '2.5rem'
+                      }}
+                    >
+                      {page}
+                    </button>
+                  );
+                } else if (
+                  page === currentPage - 3 ||
+                  page === currentPage + 3
+                ) {
+                  return (
+                    <span key={page} style={{ padding: '0 0.25rem', color: '#6c757d' }}>
+                      ...
+                    </span>
+                  );
+                }
+                return null;
+              })}
+            </div>
+
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+              disabled={currentPage === totalPages}
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: currentPage === totalPages ? '#e9ecef' : '#007bff',
+                color: currentPage === totalPages ? '#6c757d' : 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                fontSize: '0.875rem',
+                fontWeight: '500'
+              }}
+            >
+              Siguiente
+            </button>
+
+            <span style={{ color: '#6c757d', fontSize: '0.875rem', marginLeft: '1rem' }}>
+              Página <strong>{currentPage}</strong> de <strong>{totalPages}</strong>
+            </span>
+          </div>
+        )}
       </main>
 
       <ConfirmationModal
