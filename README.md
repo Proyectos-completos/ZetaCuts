@@ -44,7 +44,7 @@ Backend
 
 ## Arquitectura
 
-- Frontend y backend desacoplados**, comunicados mediante una API REST.
+- Frontend y backend desacoplados, comunicados mediante una API REST.
 - Backend organizado con controladores, modelos y validaciones usando Eloquent ORM.
 - Frontend modular basado en componentes reutilizables.
 
@@ -56,4 +56,4 @@ Backend
   https://zetacuts-frontend-hdqr.onrender.com
 
 ## Autor
-Desarrollado por Jose María Mira Esteban
+Desarrollado por Jose Maria Mira Esteban
