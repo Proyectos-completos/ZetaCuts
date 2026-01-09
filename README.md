@@ -10,12 +10,12 @@ Permite a los clientes reservar citas online, gestionar su perfil y acumular pun
 
 ```
 ZetaCuts/
-+-- frontend/           # Aplicación React
-+-- backend/            # API Laravel
-+-- docs/              # Documentación
-+-- docker-compose.yml # Configuración Docker
-+-- DOCKER_SETUP.md    # Guía completa de Docker
-+-- README.md          # Este archivo
+├── frontend/           # Aplicación React
+├── backend/            # API Laravel
+├── docs/              # Documentación
+├── docker-compose.yml # Configuración Docker
+├── DOCKER_SETUP.md    # Guía completa de Docker
+└── README.md          # Este archivo
 ```
 
 
