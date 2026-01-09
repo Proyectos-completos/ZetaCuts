@@ -118,6 +118,11 @@ const Users = () => {
     setUsers(paginated);
   }, [filteredUsers, currentPage, startIndex, endIndex]);
 
+  // Scroll hacia arriba cuando cambia la página
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('es-ES', {
