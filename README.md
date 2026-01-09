@@ -8,12 +8,12 @@ Permite a los clientes reservar citas online, gestionar su perfil y acumular pun
 
 ## Estructura del Proyecto
 ZetaCuts/
-├── frontend/           # Aplicación React
-├── backend/            # API Laravel
-├── docs/              # Documentación
+├── frontend/ # Aplicación React
+├── backend/ # API Laravel
+├── docs/ # Documentación
 ├── docker-compose.yml # Configuración Docker
-├── DOCKER_SETUP.md    # Guía completa de Docker
-└── README.md          # Este archivo
+├── DOCKER_SETUP.md # Guía completa de Docker
+└── README.md # Este archivo
 
 ## Funcionalidades principales
 - Reserva de citas online con selección de barbero, fecha y hora  
@@ -24,7 +24,7 @@ ZetaCuts/
 - Tienda online de productos de cuidado capilar  
 - Interfaz responsive y accesible  
 
-# Tecnologías utilizadas
+## Tecnologías utilizadas
 Frontend
 - React
 - React Router DOM
@@ -44,7 +44,7 @@ Backend
 - Backend organizado con controladores, modelos y validaciones usando Eloquent ORM.
 - Frontend modular basado en componentes reutilizables.
 
-## 🌐 Demo y repositorio
+## Demo y repositorio
 - Repositorio:
   https://github.com/Proyectos-completos/ZetaCuts
 
