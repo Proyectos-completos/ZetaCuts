@@ -421,7 +421,7 @@ filtered.sort((a, b) => {
                         {formatDate(userItem.created_at)}
                       </td>
                       <td>
-                        {!userItem.is_admin && (
+                        {!userItem.is_admin && !userItem.is_barbero && (
                           <button
                             onClick={() => handleDeleteClick(userItem.id, userItem.name)}
                             disabled={deletingUserId === userItem.id}
@@ -440,7 +440,7 @@ filtered.sort((a, b) => {
                             {deletingUserId === userItem.id ? 'Eliminando...' : 'Eliminar'}
                           </button>
                         )}
-                        {userItem.is_admin && (
+                        {(userItem.is_admin || userItem.is_barbero) && (
                           <span style={{ color: '#6c757d', fontSize: '0.875rem' }}>No se puede eliminar</span>
                         )}
                       </td>
