@@ -19,6 +19,7 @@ const Users = () => {
   const [sortOrder, setSortOrder] = useState('desc'); 
   const [filterType, setFilterType] = useState('all'); 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [deletingUserId, setDeletingUserId] = useState(null);
 
   useEffect(() => {
     if (authLoading) {
@@ -105,6 +106,30 @@ filtered.sort((a, b) => {
       hour: '2-digit',
       minute: '2-digit'
     });
+  };
+
+  const handleDeleteUser = async (userId, userName) => {
+    if (!window.confirm(`¿Estás seguro de que quieres eliminar al usuario "${userName}" (ID: ${userId})? Esta acción no se puede deshacer.`)) {
+      return;
+    }
+
+    setDeletingUserId(userId);
+    try {
+      const response = await api.delete(`/users/${userId}`);
+      if (response.data.success) {
+        // Recargar la lista de usuarios
+        await loadUsers();
+        alert('Usuario eliminado exitosamente');
+      } else {
+        alert(response.data.message || 'Error al eliminar usuario');
+      }
+    } catch (error) {
+      console.error('Error eliminando usuario:', error);
+      const errorMessage = error.response?.data?.message || 'Error al eliminar usuario';
+      alert(errorMessage);
+    } finally {
+      setDeletingUserId(null);
+    }
   };
 
   if (authLoading || !initialized) {
@@ -344,12 +369,13 @@ filtered.sort((a, b) => {
                   <th>Tipo</th>
                   <th>Puntos</th>
                   <th>Fecha de Registro</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {users.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="users-no-results">
+                    <td colSpan="8" className="users-no-results">
                       No hay usuarios registrados
                     </td>
                   </tr>
@@ -370,6 +396,30 @@ filtered.sort((a, b) => {
                       <td>{userItem.points || 0}</td>
                       <td style={{ color: '#6c757d', fontSize: '0.9rem' }}>
                         {formatDate(userItem.created_at)}
+                      </td>
+                      <td>
+                        {!userItem.is_admin && (
+                          <button
+                            onClick={() => handleDeleteUser(userItem.id, userItem.name)}
+                            disabled={deletingUserId === userItem.id}
+                            style={{
+                              padding: '0.4rem 0.8rem',
+                              backgroundColor: '#dc3545',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '4px',
+                              cursor: deletingUserId === userItem.id ? 'not-allowed' : 'pointer',
+                              fontSize: '0.875rem',
+                              opacity: deletingUserId === userItem.id ? 0.6 : 1
+                            }}
+                            title="Eliminar usuario"
+                          >
+                            {deletingUserId === userItem.id ? 'Eliminando...' : 'Eliminar'}
+                          </button>
+                        )}
+                        {userItem.is_admin && (
+                          <span style={{ color: '#6c757d', fontSize: '0.875rem' }}>No se puede eliminar</span>
+                        )}
                       </td>
                     </tr>
                   ))
