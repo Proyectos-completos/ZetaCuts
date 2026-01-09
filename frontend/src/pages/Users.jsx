@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
 import UserMenu from '../components/UserMenu';
+import ConfirmationModal from '../components/ConfirmationModal';
+import Toast from '../components/Toast';
 import '../styles/Barberos.css';
 import '../styles/Home.css';
 import '../styles/Users.css';
@@ -20,6 +22,9 @@ const Users = () => {
   const [filterType, setFilterType] = useState('all'); 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [deletingUserId, setDeletingUserId] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
 
   useEffect(() => {
     if (authLoading) {
@@ -108,27 +113,45 @@ filtered.sort((a, b) => {
     });
   };
 
-  const handleDeleteUser = async (userId, userName) => {
-    if (!window.confirm(`¿Estás seguro de que quieres eliminar al usuario "${userName}" (ID: ${userId})? Esta acción no se puede deshacer.`)) {
-      return;
-    }
+  const handleDeleteClick = (userId, userName) => {
+    setUserToDelete({ id: userId, name: userName });
+    setShowDeleteModal(true);
+  };
 
-    setDeletingUserId(userId);
+  const handleDeleteConfirm = async () => {
+    if (!userToDelete) return;
+
+    setDeletingUserId(userToDelete.id);
+    setShowDeleteModal(false);
+    
     try {
-      const response = await api.delete(`/users/${userId}`);
+      const response = await api.delete(`/users/${userToDelete.id}`);
       if (response.data.success) {
         // Recargar la lista de usuarios
         await loadUsers();
-        alert('Usuario eliminado exitosamente');
+        setToast({
+          isVisible: true,
+          message: 'Usuario eliminado exitosamente',
+          type: 'success'
+        });
       } else {
-        alert(response.data.message || 'Error al eliminar usuario');
+        setToast({
+          isVisible: true,
+          message: response.data.message || 'Error al eliminar usuario',
+          type: 'error'
+        });
       }
     } catch (error) {
       console.error('Error eliminando usuario:', error);
       const errorMessage = error.response?.data?.message || 'Error al eliminar usuario';
-      alert(errorMessage);
+      setToast({
+        isVisible: true,
+        message: errorMessage,
+        type: 'error'
+      });
     } finally {
       setDeletingUserId(null);
+      setUserToDelete(null);
     }
   };
 
@@ -400,7 +423,7 @@ filtered.sort((a, b) => {
                       <td>
                         {!userItem.is_admin && (
                           <button
-                            onClick={() => handleDeleteUser(userItem.id, userItem.name)}
+                            onClick={() => handleDeleteClick(userItem.id, userItem.name)}
                             disabled={deletingUserId === userItem.id}
                             style={{
                               padding: '0.4rem 0.8rem',
@@ -441,6 +464,27 @@ filtered.sort((a, b) => {
           )}
         </div>
       </main>
+
+      <ConfirmationModal
+        isOpen={showDeleteModal}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setUserToDelete(null);
+        }}
+        onConfirm={handleDeleteConfirm}
+        title="Confirmar Eliminación"
+        message={userToDelete ? `¿Estás seguro de que quieres eliminar al usuario "${userToDelete.name}" (ID: ${userToDelete.id})? Esta acción no se puede deshacer.` : ''}
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        type="warning"
+      />
+
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={() => setToast({ ...toast, isVisible: false })}
+      />
     </div>
   );
 };
