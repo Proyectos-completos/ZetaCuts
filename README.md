@@ -7,13 +7,17 @@ ZetaCuts es una aplicación web para la gestión integral de una barbería, dise
 Permite a los clientes reservar citas online, gestionar su perfil y acumular puntos de fidelización, mientras que los administradores pueden gestionar barberos, citas, productos y reseñas desde un panel centralizado.
 
 ## Estructura del Proyecto
+
+```
 ZetaCuts/
-├── frontend/ # Aplicación React
-├── backend/ # API Laravel
-├── docs/ # Documentación
-├── docker-compose.yml # Configuración Docker
-├── DOCKER_SETUP.md # Guía completa de Docker
-└── README.md # Este archivo
++-- frontend/           # Aplicación React
++-- backend/            # API Laravel
++-- docs/              # Documentación
++-- docker-compose.yml # Configuración Docker
++-- DOCKER_SETUP.md    # Guía completa de Docker
++-- README.md          # Este archivo
+```
+
 
 ## Funcionalidades principales
 - Reserva de citas online con selección de barbero, fecha y hora  
