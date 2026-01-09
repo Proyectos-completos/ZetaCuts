@@ -2,9 +2,10 @@
 
 Proyecto web con React (Frontend) y Laravel (Backend)
 
-## Estructura del Proyecto
+ZetaCuts es una aplicación web para la gestión integral de una barbería**, diseñada para modernizar el proceso de reservas y mejorar la experiencia tanto de clientes como de administradores.
+Permite a los clientes **reservar citas online**, gestionar su perfil y acumular **puntos de fidelización**, mientras que los administradores pueden gestionar barberos, citas, productos y reseñas desde un panel centralizado.
 
-```
+## Estructura del Proyecto
 ZetaCuts/
 ├── frontend/           # Aplicación React
 ├── backend/            # API Laravel
@@ -13,59 +14,50 @@ ZetaCuts/
 ├── DOCKER_SETUP.md    # Guía completa de Docker
 └── README.md          # Este archivo
 ```
-
-## 🐳 Inicio Rápido con Docker (Recomendado)
-
-**La forma más fácil de ejecutar el proyecto en cualquier computadora es usando Docker.**
-
-### Requisitos
-- Docker Desktop (Windows/Mac) o Docker Engine + Docker Compose (Linux)
-
-### Comandos
-
-```bash
-# Construir e iniciar todos los servicios
-docker-compose up -d --build
-
-# Ver logs
-docker-compose logs -f
-
-# Detener servicios
-docker-compose down
 ```
 
-### Acceso a la Aplicación
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:8000
-- **phpMyAdmin**: http://localhost:8080
+## Funcionalidades principales
+- Reserva de citas online con selección de barbero, fecha y hora  
+- Sistema de puntos de fidelización (canjeables por servicios)  
+- Gestión de usuarios (clientes, barberos y administradores)  
+- Gestión de barberos y citas 
+- Reseñas de barberos  
+- Tienda online de productos de cuidado capilar  
+- Interfaz responsive y accesible  
 
-## Desarrollo Local (Sin Docker)
-
-### Requisitos
-
-- Node.js (v18+)
-- PHP (v8.2+)
-- Composer
-- MySQL 8.0
-
-### Frontend (React)
-```bash
-cd frontend
-npm install
-npm start
 ```
 
-### Backend (Laravel)
-```bash
-cd backend
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate
-php artisan serve
 ```
+# Tecnologías utilizadas
+Frontend
+- React
+- React Router DOM
+- CSS3 personalizado
+- Axios
+- Recharts
 
-## Desarrollo
+Backend
+- Laravel (API REST)
+- PHP
+- MySQL
+- Laravel Sanctum (autenticación)
 
-1. El frontend se ejecuta en `http://localhost:3000`
-2. El backend se ejecuta en `http://localhost:8000`
+```bash
+```
+## Arquitectura
+
+- Frontend y backend desacoplados**, comunicados mediante una API REST.
+- Backend organizado con controladores, modelos y validaciones usando Eloquent ORM.
+- Frontend modular basado en componentes reutilizables.
+
+---
+
+## 🌐 Demo y repositorio
+- Repositorio:
+  https://github.com/Proyectos-completos/ZetaCuts
+
+- Aplicación en producción:
+  https://zetacuts-frontend-hdqr.onrender.com
+
+## Autor
+Desarrollado por **Jose María Mira Esteban**
