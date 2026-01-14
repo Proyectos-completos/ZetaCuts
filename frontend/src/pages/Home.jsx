@@ -331,12 +331,10 @@ const openUserAuthModal = () => {
                         loading={index === 0 ? "eager" : "lazy"}
                         fetchPriority={index === 0 ? "high" : "auto"}
                         decoding="async"
-                        onError={(e) => {
-                          console.error('Error cargando imagen:', haircut.image);
-                          e.target.style.display = 'none';
-                        }}
-                        onLoad={() => {
-                          console.log('Imagen cargada correctamente:', haircut.image);
+                        style={{
+                          imageRendering: 'high-quality',
+                          WebkitImageRendering: 'high-quality',
+                          msInterpolationMode: 'bicubic'
                         }}
                       />
                       <div className="slide-overlay">

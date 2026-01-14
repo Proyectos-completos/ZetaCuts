@@ -895,7 +895,7 @@
 .carousel-track {
   position: relative;
   width: 100%;
-  height: 520px;
+  height: 600px;
   overflow: hidden;
   border-radius: 20px;
 }
@@ -938,12 +938,23 @@
   -moz-user-drag: none;
   -o-user-drag: none;
   pointer-events: none;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-  image-rendering: high-quality;
   display: block;
   min-width: 100%;
   min-height: 100%;
+  /* Máxima calidad de renderizado */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: high-quality;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  /* Mejor calidad de suavizado */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Evitar pixelación */
+  image-rendering: auto;
+  -ms-interpolation-mode: bicubic;
 }
 
 .carousel-slide:hover .slide-image img {
