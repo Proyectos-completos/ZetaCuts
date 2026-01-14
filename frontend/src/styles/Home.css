@@ -882,7 +882,7 @@
 
 .carousel-container {
   position: relative;
-  max-width: 1200px;
+  max-width: 1400px;
   width: 95%;
   margin: 0 auto;
   overflow: hidden;
@@ -895,9 +895,15 @@
 .carousel-track {
   position: relative;
   width: 100%;
-  height: 600px;
+  height: 650px;
   overflow: hidden;
   border-radius: 20px;
+}
+
+@media (min-width: 1400px) {
+  .carousel-track {
+    height: 700px;
+  }
 }
 
 .carousel-slides {
@@ -941,20 +947,21 @@
   display: block;
   min-width: 100%;
   min-height: 100%;
-  /* Máxima calidad de renderizado */
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-  image-rendering: high-quality;
+  /* Máxima calidad de renderizado - evitar pixelación */
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
-  /* Mejor calidad de suavizado */
+  /* Suavizado de alta calidad */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Evitar pixelación */
-  image-rendering: auto;
+  /* Interpolación bicúbica para mejor calidad */
   -ms-interpolation-mode: bicubic;
+  /* Renderizado optimizado para fotos */
+  image-rendering: auto;
+  /* Forzar renderizado de alta calidad en navegadores modernos */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimizeQuality;
 }
 
 .carousel-slide:hover .slide-image img {
