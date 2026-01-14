@@ -19,7 +19,7 @@ const Home = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
 const haircuts = useMemo(() => [
-    { id: 1, image: "/imagenes/corte1.jpg", title: "Corte Clásico Moderno" },
+    { id: 1, image: "/imagenes/corte1.png", title: "Corte Clásico Moderno" },
     { id: 2, image: "/imagenes/corte2.jpg", title: "Corte con Degradado" },
     { id: 3, image: "/imagenes/corte3.jpg", title: "Estilo Contemporáneo" },
     { id: 4, image: "/imagenes/corte4.jpg", title: "Corte Profesional" }
