@@ -18,12 +18,15 @@ const Home = () => {
   const [loginFromCitas, setLoginFromCitas] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-const haircuts = useMemo(() => [
-    { id: 1, image: "/imagenes/corte1.jpg", title: "Corte Clásico Moderno" },
-    { id: 2, image: "/imagenes/corte2.jpg", title: "Corte con Degradado" },
-    { id: 3, image: "/imagenes/corte3.jpg", title: "Estilo Contemporáneo" },
-    { id: 4, image: "/imagenes/corte4.jpg", title: "Corte Profesional" }
-  ], []);
+const haircuts = useMemo(() => {
+    const publicUrl = process.env.PUBLIC_URL || '';
+    return [
+      { id: 1, image: `${publicUrl}/imagenes/corte1.jpg`, title: "Corte Clásico Moderno" },
+      { id: 2, image: `${publicUrl}/imagenes/corte2.jpg`, title: "Corte con Degradado" },
+      { id: 3, image: `${publicUrl}/imagenes/corte3.jpg`, title: "Estilo Contemporáneo" },
+      { id: 4, image: `${publicUrl}/imagenes/corte4.jpg`, title: "Corte Profesional" }
+    ];
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -331,6 +334,13 @@ const openUserAuthModal = () => {
                         loading={index === 0 ? "eager" : "lazy"}
                         fetchPriority={index === 0 ? "high" : "auto"}
                         decoding="async"
+                        onError={(e) => {
+                          console.error('Error cargando imagen:', haircut.image);
+                          e.target.style.display = 'none';
+                        }}
+                        onLoad={() => {
+                          console.log('Imagen cargada correctamente:', haircut.image);
+                        }}
                       />
                       <div className="slide-overlay">
                         <h3 className="slide-title">{haircut.title}</h3>
