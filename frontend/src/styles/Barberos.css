@@ -410,10 +410,10 @@
 }
 
 .appointment-card-modal {
-  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
   border-radius: 12px;
   padding: 1.2rem;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(15, 23, 42, 0.08);
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   animation: fadeInScale 0.5s ease-out both;
