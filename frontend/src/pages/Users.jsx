@@ -449,12 +449,14 @@ const Users = () => {
                             style={{
                               padding: '0.4rem 0.8rem',
                               backgroundColor: '#dc3545',
-                              color: 'white',
+                              color: '#ffffff',
                               border: 'none',
                               borderRadius: '4px',
                               cursor: deletingUserId === userItem.id ? 'not-allowed' : 'pointer',
                               fontSize: '0.875rem',
-                              opacity: deletingUserId === userItem.id ? 0.6 : 1
+                              fontWeight: '600',
+                              opacity: deletingUserId === userItem.id ? 0.6 : 1,
+                              transition: 'all 0.3s ease'
                             }}
                             title="Eliminar usuario"
                           >
