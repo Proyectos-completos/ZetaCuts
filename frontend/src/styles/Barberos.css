@@ -689,8 +689,6 @@
 .modal-actions .btn-secondary {
   background: #000 !important;
   color: white !important;
-  background: #6c757d;
-  color: white;
   border: none;
   transition: all 0.3s ease;
   font-family: 'Oswald', sans-serif;
