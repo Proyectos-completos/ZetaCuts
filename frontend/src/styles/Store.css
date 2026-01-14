@@ -2,14 +2,14 @@
 
 .store-page {
   min-height: 100vh;
-  background: #f5f7fb;
+  background: #ffffff;
   color: #121212;
   font-family: 'Inter', sans-serif;
 }
 
 .store-hero {
   padding: 8rem 1rem 4rem;
-  background: radial-gradient(circle at top, rgba(220, 53, 69, 0.1), #f5f7fb 60%);
+  background: #ffffff;
 }
 
 .store-hero-content {
@@ -73,6 +73,7 @@
 
 .store-content {
   padding: 2rem 1rem 2rem;
+  background: #ffffff;
 }
 
 .store-controls {
