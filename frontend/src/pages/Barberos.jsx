@@ -937,7 +937,7 @@ switch (serviceType) {
                           
                           <div className="detail-row-modal">
                             <span className="detail-label-modal">Precio:</span>
-                            <span className="detail-value-modal" style={{ fontWeight: '600', color: '#28a745' }}>
+                            <span className="detail-value-modal" style={{ fontWeight: '600', color: '#4caf50' }}>
                               {calculateAppointmentPrice(appointment.service_type, appointment.notes)}
                             </span>
                           </div>
