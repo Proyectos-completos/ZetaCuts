@@ -309,8 +309,8 @@
 }
 
 .btn-view {
-  background: linear-gradient(135deg, #ffc107, #ffb300);
-  color: #000000;
+  background: #000000;
+  color: #ffffff;
   padding: 0.8rem 1.5rem;
   border-radius: 25px;
   border: none;
@@ -322,7 +322,7 @@
   letter-spacing: 0.5px;
   font-family: 'Oswald', sans-serif;
   flex: 1;
-  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   position: relative;
   overflow: hidden;
 }
@@ -343,10 +343,10 @@
 }
 
 .btn-view:hover {
-  background: linear-gradient(135deg, #ffb300, #ffc107);
+  background: #333333;
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 10px 25px rgba(255, 193, 7, 0.5);
-  color: #000000;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
 }
 
 .appointments-modal {
@@ -583,8 +583,8 @@
 }
 
 .btn-delete {
-  background: linear-gradient(135deg, #dc3545, #c82333);
-  color: #000000 !important;
+  background: #dc3545;
+  color: #ffffff !important;
   padding: 0.8rem 1.5rem;
   border-radius: 25px;
   border: none;
@@ -617,10 +617,10 @@
 }
 
 .btn-delete:hover {
-  background: linear-gradient(135deg, #c82333, #dc3545);
+  background: #c82333;
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 10px 25px rgba(220, 53, 69, 0.5);
-  color: #000000 !important;
+  color: #ffffff !important;
 }
 
 .barberos-header .btn-primary {
