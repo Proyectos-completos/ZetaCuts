@@ -131,7 +131,7 @@ return () => {
             <input
               type="email"
               name="email"
-              placeholder="Nuevo email (ejemplo@gmail.com)"
+              placeholder="Nuevo email"
               value={formData.email}
               onChange={handleInputChange}
               required

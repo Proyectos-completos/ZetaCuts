@@ -71,7 +71,7 @@ export const authService = {
    * Registra un nuevo usuario en el sistema
    * @param {Object} userData - Datos del usuario a registrar
    * @param {string} userData.name - Nombre del usuario
-   * @param {string} userData.email - Email del usuario (debe ser @gmail.com)
+   * @param {string} userData.email - Email del usuario
    * @param {string} userData.password - Contraseña (8-12 caracteres, mayúscula y número)
    * @param {string} userData.password_confirmation - Confirmación de contraseña
    * @param {string} [userData.phone] - Teléfono del usuario (opcional, máximo 9 dígitos)

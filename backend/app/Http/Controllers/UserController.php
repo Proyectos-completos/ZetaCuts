@@ -214,13 +214,7 @@ public function updateEmail(Request $request)
                 'string',
                 'email',
                 'max:255',
-                'unique:users,email,' . $user->id,
-                function ($attribute, $value, $fail) {
-                    $email = strtolower($value);
-                    if (!str_ends_with($email, '@gmail.com')) {
-                        $fail('El email debe seguir un formato: (ejemplo@gmail.com)');
-                    }
-                }
+                'unique:users,email,' . $user->id
             ],
             'password' => 'required|string',
         ]);

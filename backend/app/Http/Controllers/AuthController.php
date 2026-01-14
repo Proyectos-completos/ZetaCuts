@@ -23,14 +23,7 @@ class AuthController extends Controller
                 'string',
                 'email',
                 'max:255',
-                'unique:users',
-                function ($attribute, $value, $fail) {
-                    $email = strtolower($value);
-                    
-                    if (!str_ends_with($email, '@gmail.com')) {
-                        $fail('El email debe seguir un formato: (ejemplo@gmail.com)');
-                    }
-                }
+                'unique:users'
             ],
             'password' => [
                 'required',
@@ -60,8 +53,6 @@ if ($errors->has('email')) {
                     $errorMessage = 'El email ya está en uso';
                 } elseif (str_contains($emailError, 'required')) {
                     $errorMessage = 'El email es obligatorio';
-                } elseif (str_contains($emailError, 'debe ser de Gmail')) {
-                    $errorMessage = $emailError;
                 } elseif (str_contains($emailError, 'email')) {
                     $errorMessage = 'El formato del email no es válido';
                 } else {
@@ -143,14 +134,7 @@ public function login(Request $request)
             'email' => [
                 'required',
                 'string',
-                'email',
-                function ($attribute, $value, $fail) {
-                    $email = strtolower($value);
-                    
-                    if (!str_ends_with($email, '@gmail.com') && !str_ends_with($email, '@barbero.com')) {
-                        $fail('El email debe de tener el siguiente formato: (ejemplo@gmail.com)');
-                    }
-                }
+                'email'
             ],
             'password' => 'required|string',
         ]);
