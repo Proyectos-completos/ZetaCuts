@@ -336,6 +336,13 @@ const openUserAuthModal = () => {
                           WebkitImageRendering: 'high-quality',
                           msInterpolationMode: 'bicubic'
                         }}
+                        onError={(e) => {
+                          console.error('Error cargando imagen:', haircut.image, e);
+                          e.target.style.display = 'none';
+                        }}
+                        onLoad={() => {
+                          console.log('Imagen cargada:', haircut.image);
+                        }}
                       />
                       <div className="slide-overlay">
                         <h3 className="slide-title">{haircut.title}</h3>
