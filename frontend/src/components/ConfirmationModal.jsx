@@ -49,13 +49,17 @@ const ConfirmationModal = ({
           <button 
             className="btn btn-secondary" 
             onClick={onClose}
+            style={{ backgroundColor: '#000', color: 'white' }}
           >
             {cancelText}
           </button>
           <button 
             className="btn btn-primary" 
             onClick={handleConfirm}
-            style={getTypeStyles()}
+            style={{ 
+              backgroundColor: '#dc3545', 
+              color: 'white' 
+            }}
           >
             {confirmText}
           </button>

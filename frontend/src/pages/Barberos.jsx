@@ -865,10 +865,20 @@ switch (serviceType) {
                 <p>¿Estás seguro de que quieres eliminar al barbero "{deletingBarbero?.name}"?</p>
               </div>
               <div className="modal-actions">
-                <button type="button" className="btn btn-secondary" onClick={closeModals}>
+                <button 
+                  type="button" 
+                  className="btn btn-secondary" 
+                  onClick={closeModals}
+                  style={{ backgroundColor: '#000', color: 'white' }}
+                >
                   Cancelar
                 </button>
-                <button type="button" className="btn btn-danger" onClick={confirmDelete}>
+                <button 
+                  type="button" 
+                  className="btn btn-danger" 
+                  onClick={confirmDelete}
+                  style={{ backgroundColor: '#dc3545', color: 'white' }}
+                >
                   Eliminar
                 </button>
               </div>

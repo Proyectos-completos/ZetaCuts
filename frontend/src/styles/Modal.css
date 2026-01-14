@@ -659,12 +659,12 @@
 }
 
 .confirmation-modal .btn-secondary {
-  background: #6c757d;
+  background: #000;
   color: white;
 }
 
 .confirmation-modal .btn-secondary:hover {
-  background: #5a6268;
+  background: #333;
   transform: translateY(-2px);
 }
 
