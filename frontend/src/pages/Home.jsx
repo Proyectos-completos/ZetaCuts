@@ -2,10 +2,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import '../styles/Home.css';
 import barberiaImage from '../assets/images/icons/barberia252520fina.png';
-import corte1 from '../assets/images/Fotos Cortes/corte-1.png';
-import corte2 from '../assets/images/Fotos Cortes/corte-2.png';
-import corte3 from '../assets/images/Fotos Cortes/corte-3.png';
-import corte4 from '../assets/images/Fotos Cortes/corte-4.png';
 import LoginModal from '../components/LoginModal';
 import UserAuthModal from '../components/UserAuthModal';
 import UserMenu from '../components/UserMenu';
@@ -23,10 +19,10 @@ const Home = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
 const haircuts = useMemo(() => [
-    { id: 1, image: corte1, title: "Corte Clásico Moderno" },
-    { id: 2, image: corte2, title: "Corte con Degradado" },
-    { id: 3, image: corte3, title: "Estilo Contemporáneo" },
-    { id: 4, image: corte4, title: "Corte Profesional" }
+    { id: 1, image: "/imagenes/corte1.jpg", title: "Corte Clásico Moderno" },
+    { id: 2, image: "/imagenes/corte2.jpg", title: "Corte con Degradado" },
+    { id: 3, image: "/imagenes/corte3.jpg", title: "Estilo Contemporáneo" },
+    { id: 4, image: "/imagenes/corte4.jpg", title: "Corte Profesional" }
   ], []);
 
   useEffect(() => {
@@ -329,7 +325,13 @@ const openUserAuthModal = () => {
                     className={`carousel-slide ${currentSlide === index ? 'active' : ''}`}
                   >
                     <div className="slide-image">
-                      <img src={haircut.image} alt={haircut.title} loading={index === 0 ? "eager" : "lazy"} />
+                      <img 
+                        src={haircut.image} 
+                        alt={haircut.title} 
+                        loading={index === 0 ? "eager" : "lazy"}
+                        fetchPriority={index === 0 ? "high" : "auto"}
+                        decoding="async"
+                      />
                       <div className="slide-overlay">
                         <h3 className="slide-title">{haircut.title}</h3>
                       </div>

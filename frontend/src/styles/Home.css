@@ -934,6 +934,9 @@
   -moz-user-drag: none;
   -o-user-drag: none;
   pointer-events: none;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: high-quality;
 }
 
 .carousel-slide:hover .slide-image img {
